@@ -1,0 +1,1 @@
+emcc c++/pathfinding/pathfinding.cpp c++/pathfinding/utils.cpp -o pathfinding.js -s WASM=1 -s EXPORT_ALL=1 --std=c++14 -O3 -s TOTAL_MEMORY=536870912 --emrun --bind

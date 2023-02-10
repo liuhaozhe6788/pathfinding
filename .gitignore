@@ -1,0 +1,6 @@
+*.ipynb_checkpoints
+*.cache
+*.vscode
+notebook/data/
+package-lock.json
+package.json

@@ -1,0 +1,134 @@
+:root {
+  --color-brand--1: #ffb545;
+  --color-brand--2: #00c46a;
+
+  --color-dark--1: #2d3439;
+  --color-dark--2: #42484d;
+  --color-light--1: #aaa;
+  --color-light--2: #ececec;
+  --color-light--3: rgb(214, 222, 224);
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Manrope', sans-serif;
+  color: var(--color-light--2);
+  font-weight: 400;
+  line-height: 1.6;
+  height: 100vh;
+  padding: 2rem;
+  overscroll-behavior: none;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+.header {
+  height: 5rem;
+  background-color:  #34495e;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.settings-section{
+  display: flex;
+  align-items: center;
+}
+
+.trigger-section{
+  display: flex;
+  margin-left:1rem;
+  margin-right:1rem;
+  align-items: center;
+}
+
+.prompt-section, .prompt{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.image, .sel, .btn{
+  height: 3rem;
+}
+
+.settings-label{
+  color: #d6e9fc;
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+select, .full-trig-btn{
+  background-color: #d6e9fc;
+  color: #34495e;
+  border-radius: 1rem;
+  width: 16rem;
+  text-align:center;
+}
+.rst-trig-btn{
+  background-color: #d6e9fc;
+  color: #34495e;
+  border-radius: 1rem;
+  width: 10rem;
+  text-align:center;
+}
+option {
+  text-align: center;
+}
+
+.full-trig-btn, .rst-trig-btn{
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  cursor:pointer;
+  transition: opacity 0.15s;
+}
+
+.full-trig-btn:active{
+  opacity: 0.7;
+}
+
+.rst-trig-btn:active{
+  opacity: 0.7;
+}
+
+.prompt{  
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}
+.image{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prompt-label{
+  font-size: 1.5rem;
+}
+
+/* MAP */
+#map {
+  flex: 1;
+  background-color: var(--color-light--1);
+}

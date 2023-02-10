@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="shortcut icon" type="png" href="img/icon.png" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""
+    />
+    <script
+      defer
+      src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+      integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+      crossorigin=""
+    ></script>
+
+    <script type="text/javascript" defer src="pathfinding.js"></script>
+    <script type="text/javascript" defer src="data.js"></script>
+    <script type="text/javascript" defer src="map.js"></script>
+    <script type="text/javascript" defer src="app.js"></script>
+    <script type="text/javascript" defer src="script.js"></script>
+    <title>pathfinding</title>
+  </head>
+  <body>
+    <div class="header">
+      <div class="settings-section">
+        <label class="settings-label">Algorithms:</label>
+        <select class="sel">
+          <option value="UCSearch">Uniform Cost Search</option>
+          <option value="AStarSearch">A* Search</option>
+          <option value="ALTSearch">ALT Search</option>
+        </select>
+      </div>
+      <div class="trigger-section">
+        <button class="btn full-trig-btn">Start the progress</button>
+        <button class="btn rst-trig-btn">Reset</button>
+      </div>
+      <div class="prompt-section">
+        <div class="prompt start-node-prompt">
+          <img class="image red_marker" src="img/red_marker.png" />
+          <label class="prompt-label">Start Node</label>
+        </div>
+        <div class="prompt target-node-prompt">
+          <img class="image green_marker" src="img/green_marker.png" />
+          <label class="prompt-label">Target Node</label>
+        </div>
+        <div class="prompt landmark-prompt">
+          <img class="image landmark" src="img/landmark.png" />
+          <label class="prompt-label">Landmark</label>
+        </div>
+      </div>
+    </div>
+    <div id="map"></div>
+  </body>
+</html>
