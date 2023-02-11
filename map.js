@@ -20,7 +20,7 @@ class MyMap {
     [this.nodesCoords, this.nodesMap] = this.getNodes();
     this.graph = this.getGraph();
     this.landmark_num = 4;
-    this.landmark_used_num = 2;
+    this.landmark_used_num = 1;
     this.graph.graphPreprocessing(this.landmark_num);
     this.landmarks = [];
     // for(let i = 0; i < this.landmarks.length; i += 2){
