@@ -160,9 +160,8 @@ void Graph::avoid_selection(unsigned int cardinality){
     std::vector<Node*> node_ptrs_vec(node_ptrs.begin(), node_ptrs.end());
     auto rng = std::default_random_engine {};
     std::shuffle(node_ptrs_vec.begin(), node_ptrs_vec.end(), rng);
-    std::vector<double> start = {node_ptrs_vec[0]->get_la(), node_ptrs_vec[0]->get_lo()};
     
-    for(size_t i = 0; i < cardinality; i++){
+    while(landmarks.size() < cardinality){
         std::shuffle(node_ptrs_vec.begin(), node_ptrs_vec.end(), rng);
         Node* root_ptr = node_ptrs_vec[0];
 
@@ -186,7 +185,8 @@ void Graph::avoid_selection(unsigned int cardinality){
 
         // follow the node w to find a new landmark
         Node* leaf = find_leaf(w);
-        landmarks.push_back({leaf->get_la(), leaf->get_lo()});
+        if(find_if(landmarks.begin(), landmarks.end(), [&leaf](std::vector<double> n){return (n[0] == leaf->get_la()) && (n[1] == leaf->get_lo());})==landmarks.end())
+            landmarks.push_back({leaf->get_la(), leaf->get_lo()});
     }
 
 }
@@ -561,12 +561,12 @@ bool Graph::ALT_search(Node &src, Node &dst, int landmark_num, bool improved)
     Node* src_ptr = &src;
     Node* dst_ptr = &dst;
 
+    if(improved)
     // std::sort(landmark_ids.begin(), landmark_ids.end(), [&src_ptr, &dst_ptr](int l1, int l2){return (abs(src_ptr->dists2l[l1] - dst_ptr->dists2l[l1])) > (abs(src_ptr->dists2l[l2] - dst_ptr->dists2l[l2]));});
 
-    if(improved)
-        std::sort(landmark_ids.begin(), landmark_ids.end(), [&src_ptr, &dst_ptr](int l1, int l2){return std::max(src_ptr->dists2l[l1] - 2*dst_ptr->dists2l[l1], dst_ptr->dists2l[l1] - 2*src_ptr->dists2l[l1]) > std::max(src_ptr->dists2l[l2] - 2*dst_ptr->dists2l[l2], dst_ptr->dists2l[l2] - 2*src_ptr->dists2l[l2]);});
+        // std::sort(landmark_ids.begin(), landmark_ids.end(), [&src_ptr, &dst_ptr](int l1, int l2){return std::max(src_ptr->dists2l[l1] - 2*dst_ptr->dists2l[l1], dst_ptr->dists2l[l1] - 2*src_ptr->dists2l[l1]) > std::max(src_ptr->dists2l[l2] - 2*dst_ptr->dists2l[l2], dst_ptr->dists2l[l2] - 2*src_ptr->dists2l[l2]);});
 
-    // std::sort(landmark_ids.begin(), landmark_ids.end(), [&src_ptr, &dst_ptr](int l1, int l2){return std::max((src_ptr->dists2l[l1] - dst_ptr->dists2l[l1])/dst_ptr->dists2l[l1], (dst_ptr->dists2l[l1] - src_ptr->dists2l[l1])/src_ptr->dists2l[l1]) > std::max((src_ptr->dists2l[l2] - dst_ptr->dists2l[l2])/ dst_ptr->dists2l[l2], (dst_ptr->dists2l[l2] - src_ptr->dists2l[l2])/  src_ptr->dists2l[l2]);});
+        std::sort(landmark_ids.begin(), landmark_ids.end(), [&src_ptr, &dst_ptr](int l1, int l2){return (src_ptr->dists2l[l1] - 2*dst_ptr->dists2l[l1])> (src_ptr->dists2l[l2] - 2*dst_ptr->dists2l[l2]);});
 
     /// push the source vertex to queue to begin traversing
     open_table.push_back(src_ptr);
@@ -577,7 +577,7 @@ bool Graph::ALT_search(Node &src, Node &dst, int landmark_num, bool improved)
     while (!open_table.empty())
     {
         /// sort the open table
-        std::sort(open_table.begin(), open_table.end(), [this, &dst_ptr, &landmark_num](Node* n1, Node* n2){return this->cost_with_max_triangular_inequality(n1, dst_ptr, landmark_num) < this->cost_with_max_triangular_inequality(n2,dst_ptr, landmark_num);});
+        std::sort(open_table.begin(), open_table.end(), [this, &dst_ptr, &landmark_num, &improved](Node* n1, Node* n2){return this->cost_with_max_triangular_inequality(n1, dst_ptr, landmark_num, improved) < this->cost_with_max_triangular_inequality(n2,dst_ptr, landmark_num, improved);});
         /// traverse the graph till no connected vertex are left
         /// extract a node from stack for further traversal
         Node *node_ptr = open_table.front();
@@ -629,25 +629,42 @@ bool Graph::ALT_search(Node &src, Node &dst, int landmark_num, bool improved)
     return false;
 }
 
-double Graph::cost_with_max_triangular_inequality(Node* node_ptr, Node* dst_ptr, int landmark_num){
-    double max = abs(node_ptr->dists2l[landmark_ids[0]] - dst_ptr->dists2l[landmark_ids[0]]);
-    double temp{0};
-    for(size_t i = 1; i < landmark_num; i++){
-        temp = abs(node_ptr->dists2l[landmark_ids[i]] - dst_ptr->dists2l[landmark_ids[i]]);
-        if(temp > max) max = temp;
+double Graph::cost_with_max_triangular_inequality(Node* node_ptr, Node* dst_ptr, int landmark_num, bool improved){
+    if(improved){
+        double max = abs(node_ptr->dists2l[landmark_ids[0]] - dst_ptr->dists2l[landmark_ids[0]]);
+        double temp{0};
+        for(size_t i = 1; i < landmark_num; i++){
+            temp = abs(node_ptr->dists2l[landmark_ids[i]] - dst_ptr->dists2l[landmark_ids[i]]);
+            if(temp > max) max = temp;
+        }
+        return node_ptr->get_cost() + max * 1000;
     }
-    return node_ptr->get_cost() + max * 1000;
+    else{
+        double max = abs(node_ptr->dists2l[0] - dst_ptr->dists2l[0]);
+        double temp{0};
+        for(size_t i = 1; i < landmark_num; i++){
+            temp = abs(node_ptr->dists2l[i] - dst_ptr->dists2l[i]);
+            if(temp > max) max = temp;
+        }
+        return node_ptr->get_cost() + max * 1000;
+    }
     // double v1 = abs(node_ptr->dists2l[landmark_ids[0]] - dst_ptr->dists2l[landmark_ids[0]]);
 
     // return node_ptr->get_cost() + v1 * 1000;
 }
 
-std::vector<double> Graph::get_topn_landmarks(int n){
+std::vector<double> Graph::get_landmarks(int n, bool improved){
     std::vector<double> lms{};
-    for(size_t i = 0; i < n; i++){
-        lms.push_back(landmarks[landmark_ids[i]][0]);
-        lms.push_back(landmarks[landmark_ids[i]][1]);
-    }   
+    if(improved)
+        for(size_t i = 0; i < n; i++){
+            lms.push_back(landmarks[landmark_ids[i]][0]);
+            lms.push_back(landmarks[landmark_ids[i]][1]);
+        }   
+    else
+        for(size_t i = 0; i < n; i++){
+            lms.push_back(landmarks[i][0]);
+            lms.push_back(landmarks[i][1]);
+        }  
     return lms;
 }
 
@@ -707,7 +724,7 @@ EMSCRIPTEN_BINDINGS(script){
     .function("UCSearch", &Graph::uniform_cost_search)
     .function("AStarSearch", &Graph::astar_search)
     .function("ALTSearch", &Graph::ALT_search)
-    .function("getTopnLandmarks", &Graph::get_topn_landmarks)
+    .function("getLandmarks", &Graph::get_landmarks)
     .function("getExtPaths", &Graph::get_ext_paths)
     .function("getPath", &Graph::get_path);
     emscripten::register_vector<double>("vector1D");

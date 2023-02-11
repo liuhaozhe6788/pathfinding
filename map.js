@@ -19,17 +19,14 @@ class MyMap {
 
     [this.nodesCoords, this.nodesMap] = this.getNodes();
     this.graph = this.getGraph();
-    this.landmark_num = 4;
-    this.landmark_used_num = 1;
+    this.landmark_num = 32;
+    this.landmark_used_num = 2;
     this.graph.graphPreprocessing(this.landmark_num);
     this.landmarks = [];
-    // for(let i = 0; i < this.landmarks.length; i += 2){
-    //   console.log(`{${this.landmarks[i].toFixed(7)}, ${this.landmarks[i+1].toFixed(7)}},`);
-    // }
 
     this.map = this.renderMap();
-    this.defaultSrcCoords = [30.5908896, 114.2964413];
-    this.defaultDstCoords = [30.5804229, 114.2556316];
+    this.defaultSrcCoords = [30.6078668,114.3850297];
+    this.defaultDstCoords = [30.6253647,114.301978];
     this.srcCoords = this.defaultSrcCoords;
     this.dstCoords = this.defaultDstCoords;
     this.srcNode = this.nodesMap[this.srcCoords];
@@ -91,8 +88,8 @@ class MyMap {
     return graph;
   }
 
-  getLandmarks(landmark_num){
-    let data = this.graph.getTopnLandmarks(landmark_num);
+  getLandmarks(improved){
+    let data = this.graph.getLandmarks(this.landmark_used_num, improved);
     let landmarks = [];
     for(let i = 0; i < data.size(); i+=2){
       landmarks.push([data.get(i), data.get(i+1)]);
@@ -151,8 +148,8 @@ class MyMap {
     return this.renderMarker(this.dstCoords, this.dstIcon);
   }
 
-  renderLandmarks(landmark_num){
-    this.landmarks = this.getLandmarks(landmark_num);
+  renderLandmarks(improved){
+    this.landmarks = this.getLandmarks(improved);
     for(let i = 0; i < this.landmarks.length; i ++){
       this.lmMarkers.push(this.renderMarker(this.landmarks[i]));
     }
@@ -203,10 +200,10 @@ class MyMap {
         success = this.graph.AStarSearch(this.srcNode, this.dstNode);
         break;
       case "ALT Search":
-        success = this.graph.ALTSearch(this.srcNode, this.dstNode, 16, false);
+        success = this.graph.ALTSearch(this.srcNode, this.dstNode, this.landmark_used_num, false);
         break;
       case "ALT Search Improved":
-        success = this.graph.ALTSearch(this.srcNode, this.dstNode, 2, true);
+        success = this.graph.ALTSearch(this.srcNode, this.dstNode, this.landmark_used_num, true);
         break;
       default:
         break;
@@ -214,9 +211,12 @@ class MyMap {
     const end = Date.now();
     window.confirm(`Execution time: ${(end - start)/1000} s`);
     if(algo==="ALT Search")
-      this.renderLandmarks(this.landmark_num);
+      this.renderLandmarks(false);
     if(algo==="ALT Search Improved")
-      this.renderLandmarks(this.landmark_used_num); 
+      this.renderLandmarks(true); 
+    for(let i = 0; i < this.landmarks.length; i ++){
+      console.log(`{${this.landmarks[i][0].toFixed(7)}, ${this.landmarks[i][1].toFixed(7)}},`);
+    }
     this.renderExtPaths("blue");
     if(success)
       this.renderFinalPath("red");

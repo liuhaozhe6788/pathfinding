@@ -127,10 +127,40 @@ private:
 
     /// landmarks for ALT a* (precomputed with random avoid method)
     // TODO 8 to 16 precomputed
-    std::vector<std::vector<double>> landmarks = { {30.6292532, 114.2096635},
- {30.5005932, 114.2935017},
- {30.5529102, 114.2353832},
- {30.6567068, 114.3060880}};
+    std::vector<std::vector<double>> landmarks = {
+        {30.6357604, 114.2102454},
+        {30.6206240, 114.4190201},
+        {30.6201832, 114.2132492},
+        {30.6551874, 114.2988177},
+        {30.5827114, 114.4114266},
+        {30.5211646, 114.2465313},
+        {30.5005932, 114.2935017},
+        {30.5751089, 114.2354420},
+        {30.6550336, 114.2822843},
+        {30.5017398, 114.4292775},
+        {30.5617746, 114.4432224},
+        {30.6385844, 114.3949592},
+        {30.6433098, 114.2586681},
+        {30.5226665, 114.4503951},
+        {30.6474337, 114.3370946},
+        {30.6018754, 114.4224124},
+        {30.4942223, 114.3210146},
+        {30.6049409, 114.4286292},
+        {30.5996193, 114.2154722},
+        {30.6291274, 114.4206168},
+        {30.4979479, 114.3620929},
+        {30.5701618, 114.4089203},
+        {30.4986034, 114.3283489},
+        {30.6567048, 114.3121701},
+        {30.4910525, 114.3276655},
+        {30.6371074, 114.3733771},
+        {30.5027901, 114.3822579},
+        {30.5656868, 114.2133197},
+        {30.4929671, 114.3842194},
+        {30.5059596, 114.4076078},
+        {30.5529102, 114.2353832},
+        {30.5824735, 114.4119657}
+    };
     std::vector<int> landmark_ids;
 
     /**
@@ -199,7 +229,7 @@ private:
     /**
      * @brief calculate the maximum triangular inequality from current node to dst node
      */
-    double cost_with_max_triangular_inequality(Node* node_ptr, Node* dst_ptr, int landmark_num);
+    double cost_with_max_triangular_inequality(Node* node_ptr, Node* dst_ptr, int landmark_num, bool improved);
 
 
     static std::vector<double> flatten(std::vector<std::vector<double>> const &vec)
@@ -234,10 +264,8 @@ public:
     // void set_nodes_coords();
 
     /**
-     * @brief Get the landmarks object
+     * @brief Preprocess the graph: set landmarks and precompute distances
      * 
-     * @param cardinality 
-     * @return std::vector<double> 
      */
     void graph_preprocessing(unsigned int cardinality);
 
@@ -273,7 +301,7 @@ public:
      */
     bool ALT_search(Node &src, Node &dst, int landmarks_num, bool improved);
 
-    std::vector<double> get_topn_landmarks(int n);
+    std::vector<double> get_landmarks(int n, bool improved);
 
     /**
      * @brief Get the ext paths object
