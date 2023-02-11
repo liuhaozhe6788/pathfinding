@@ -19,7 +19,9 @@ class MyMap {
 
     [this.nodesCoords, this.nodesMap] = this.getNodes();
     this.graph = this.getGraph();
-    this.graph.graphPreprocessing(4);
+    this.landmark_num = 4;
+    this.landmark_used_num = 2;
+    this.graph.graphPreprocessing(this.landmark_num);
     this.landmarks = [];
     // for(let i = 0; i < this.landmarks.length; i += 2){
     //   console.log(`{${this.landmarks[i].toFixed(7)}, ${this.landmarks[i+1].toFixed(7)}},`);
@@ -89,8 +91,8 @@ class MyMap {
     return graph;
   }
 
-  getLandmarks(){
-    let data = this.graph.getTopnLandmarks(2);
+  getLandmarks(landmark_num){
+    let data = this.graph.getTopnLandmarks(landmark_num);
     let landmarks = [];
     for(let i = 0; i < data.size(); i+=2){
       landmarks.push([data.get(i), data.get(i+1)]);
@@ -149,8 +151,8 @@ class MyMap {
     return this.renderMarker(this.dstCoords, this.dstIcon);
   }
 
-  renderLandmarks(){
-    this.landmarks = this.getLandmarks();
+  renderLandmarks(landmark_num){
+    this.landmarks = this.getLandmarks(landmark_num);
     for(let i = 0; i < this.landmarks.length; i ++){
       this.lmMarkers.push(this.renderMarker(this.landmarks[i]));
     }
@@ -164,6 +166,7 @@ class MyMap {
     );
     this.srcMarker.setLatLng(closest);
     this.srcCoords = closest;
+    console.log(`the current coordinates of start node is:${this.srcCoords}`);
     this.srcNode = this.nodesMap[this.srcCoords];
     this.removePaths();
   }
@@ -176,6 +179,7 @@ class MyMap {
     );
     this.dstMarker.setLatLng(closest);
     this.dstCoords = closest;
+    console.log(`the current coordinates of target node is:${this.dstCoords}`);
     this.dstNode = this.nodesMap[this.dstCoords];
     this.removePaths();
   }
@@ -199,16 +203,20 @@ class MyMap {
         success = this.graph.AStarSearch(this.srcNode, this.dstNode);
         break;
       case "ALT Search":
-        success = this.graph.ALTSearch(this.srcNode, this.dstNode);
+        success = this.graph.ALTSearch(this.srcNode, this.dstNode, 16, false);
+        break;
+      case "ALT Search Improved":
+        success = this.graph.ALTSearch(this.srcNode, this.dstNode, 2, true);
         break;
       default:
         break;
     }
     const end = Date.now();
     window.confirm(`Execution time: ${(end - start)/1000} s`);
-    if(algo==="ALT Search"){
-      this.renderLandmarks();
-    }
+    if(algo==="ALT Search")
+      this.renderLandmarks(this.landmark_num);
+    if(algo==="ALT Search Improved")
+      this.renderLandmarks(this.landmark_used_num); 
     this.renderExtPaths("blue");
     if(success)
       this.renderFinalPath("red");

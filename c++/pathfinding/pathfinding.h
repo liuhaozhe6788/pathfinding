@@ -198,12 +198,8 @@ private:
 
     /**
      * @brief calculate the maximum triangular inequality from current node to dst node
-     * 
-     * @param node_ptr
-     * @param dst_ptr 
-     * @return double 
      */
-    double cost_with_max_triangular_inequality(Node* node_ptr, Node* dst_ptr);
+    double cost_with_max_triangular_inequality(Node* node_ptr, Node* dst_ptr, int landmark_num);
 
 
     static std::vector<double> flatten(std::vector<std::vector<double>> const &vec)
@@ -275,7 +271,7 @@ public:
      *  https://www.cs.princeton.edu/courses/archive/spr06/cos423/Handouts/GH05.pdf
      *  https://www.cs.princeton.edu/courses/archive/spr06/cos423/Handouts/GW05.pdf
      */
-    bool ALT_search(Node &src, Node &dst);
+    bool ALT_search(Node &src, Node &dst, int landmarks_num, bool improved);
 
     std::vector<double> get_topn_landmarks(int n);
 

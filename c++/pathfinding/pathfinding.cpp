@@ -549,7 +549,7 @@ bool Graph::astar_search(Node &src, Node &dst)
 }
 
 // implementation of ALT search in https://www.cs.princeton.edu/courses/archive/spr06/cos423/Handouts/GH05.pdf
-bool Graph::ALT_search(Node &src, Node &dst)
+bool Graph::ALT_search(Node &src, Node &dst, int landmark_num, bool improved)
 {   
     reset_graph();
 
@@ -563,7 +563,8 @@ bool Graph::ALT_search(Node &src, Node &dst)
 
     // std::sort(landmark_ids.begin(), landmark_ids.end(), [&src_ptr, &dst_ptr](int l1, int l2){return (abs(src_ptr->dists2l[l1] - dst_ptr->dists2l[l1])) > (abs(src_ptr->dists2l[l2] - dst_ptr->dists2l[l2]));});
 
-    std::sort(landmark_ids.begin(), landmark_ids.end(), [&src_ptr, &dst_ptr](int l1, int l2){return std::max(src_ptr->dists2l[l1] - 2*dst_ptr->dists2l[l1], dst_ptr->dists2l[l1] - 2*src_ptr->dists2l[l1]) > std::max(src_ptr->dists2l[l2] - 2*dst_ptr->dists2l[l2], dst_ptr->dists2l[l2] - 2*src_ptr->dists2l[l2]);});
+    if(improved)
+        std::sort(landmark_ids.begin(), landmark_ids.end(), [&src_ptr, &dst_ptr](int l1, int l2){return std::max(src_ptr->dists2l[l1] - 2*dst_ptr->dists2l[l1], dst_ptr->dists2l[l1] - 2*src_ptr->dists2l[l1]) > std::max(src_ptr->dists2l[l2] - 2*dst_ptr->dists2l[l2], dst_ptr->dists2l[l2] - 2*src_ptr->dists2l[l2]);});
 
     // std::sort(landmark_ids.begin(), landmark_ids.end(), [&src_ptr, &dst_ptr](int l1, int l2){return std::max((src_ptr->dists2l[l1] - dst_ptr->dists2l[l1])/dst_ptr->dists2l[l1], (dst_ptr->dists2l[l1] - src_ptr->dists2l[l1])/src_ptr->dists2l[l1]) > std::max((src_ptr->dists2l[l2] - dst_ptr->dists2l[l2])/ dst_ptr->dists2l[l2], (dst_ptr->dists2l[l2] - src_ptr->dists2l[l2])/  src_ptr->dists2l[l2]);});
 
@@ -576,7 +577,7 @@ bool Graph::ALT_search(Node &src, Node &dst)
     while (!open_table.empty())
     {
         /// sort the open table
-        std::sort(open_table.begin(), open_table.end(), [this, dst_ptr](Node* n1, Node* n2){return this->cost_with_max_triangular_inequality(n1, dst_ptr) < this->cost_with_max_triangular_inequality(n2,dst_ptr);});
+        std::sort(open_table.begin(), open_table.end(), [this, &dst_ptr, &landmark_num](Node* n1, Node* n2){return this->cost_with_max_triangular_inequality(n1, dst_ptr, landmark_num) < this->cost_with_max_triangular_inequality(n2,dst_ptr, landmark_num);});
         /// traverse the graph till no connected vertex are left
         /// extract a node from stack for further traversal
         Node *node_ptr = open_table.front();
@@ -628,10 +629,10 @@ bool Graph::ALT_search(Node &src, Node &dst)
     return false;
 }
 
-double Graph::cost_with_max_triangular_inequality(Node* node_ptr, Node* dst_ptr){
+double Graph::cost_with_max_triangular_inequality(Node* node_ptr, Node* dst_ptr, int landmark_num){
     double max = abs(node_ptr->dists2l[landmark_ids[0]] - dst_ptr->dists2l[landmark_ids[0]]);
     double temp{0};
-    for(size_t i = 1; i < 2; i++){
+    for(size_t i = 1; i < landmark_num; i++){
         temp = abs(node_ptr->dists2l[landmark_ids[i]] - dst_ptr->dists2l[landmark_ids[i]]);
         if(temp > max) max = temp;
     }
