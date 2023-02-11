@@ -36,4 +36,8 @@ After modifying the C++ code, run
 ./build.sh
 ```
 
+## Troubleshooting
+1. Please refresh the page a couple of times if the map and markers are not rendered
+2. Please use a VPN if the map is not rendered completely
+
 
