@@ -21,6 +21,7 @@ class App {
   }
 
   reset(){
+    this.myMap.removeLmMarkers();
     this.myMap.removePaths();
     this.myMap.resetMap();
   }

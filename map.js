@@ -163,7 +163,7 @@ class MyMap {
     );
     this.srcMarker.setLatLng(closest);
     this.srcCoords = closest;
-    console.log(`the current coordinates of start node is:${this.srcCoords}`);
+    // console.log(`the current coordinates of start node is:${this.srcCoords}`);
     this.srcNode = this.nodesMap[this.srcCoords];
     this.removePaths();
   }
@@ -176,7 +176,7 @@ class MyMap {
     );
     this.dstMarker.setLatLng(closest);
     this.dstCoords = closest;
-    console.log(`the current coordinates of target node is:${this.dstCoords}`);
+    // console.log(`the current coordinates of target node is:${this.dstCoords}`);
     this.dstNode = this.nodesMap[this.dstCoords];
     this.removePaths();
   }
@@ -214,9 +214,9 @@ class MyMap {
       this.renderLandmarks(false);
     if(algo==="ALT Search Improved")
       this.renderLandmarks(true); 
-    for(let i = 0; i < this.landmarks.length; i ++){
-      console.log(`{${this.landmarks[i][0].toFixed(7)}, ${this.landmarks[i][1].toFixed(7)}},`);
-    }
+    // for(let i = 0; i < this.landmarks.length; i ++){
+    //   console.log(`{${this.landmarks[i][0].toFixed(7)}, ${this.landmarks[i][1].toFixed(7)}},`);
+    // }
     this.renderExtPaths("blue");
     if(success)
       this.renderFinalPath("red");
