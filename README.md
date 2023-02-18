@@ -2,7 +2,7 @@
 
 Implementation of Pathfinding Algorithms on road map of Wuhan for my 2022AI course final project.
 
-## Three algorithms
+## Four algorithms
 
 **Uniform Cost Search**: aka Dijkstra Algorithm.
 
@@ -11,6 +11,8 @@ Implementation of Pathfinding Algorithms on road map of Wuhan for my 2022AI cour
 **ALT Search**: with triangular inequality lower bounds in [this](https://www.cs.princeton.edu/courses/archive/spr06/cos423/Handouts/GH05.pdf), the landmark is selected using avoid methods in [this](https://www.cs.princeton.edu/courses/archive/spr06/cos423/Handouts/GW05.pdf).
 
 **ALT Search Improved**: select two landmarks that are closely after the target node before each pathfinding search.
+
+Generally, ALT Search Improved is the fastest among all four algorithms.
 
 ## How to run it
 
