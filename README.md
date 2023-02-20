@@ -1,6 +1,16 @@
 # Pathfinding Algorithms
 
-Implementation of Pathfinding Algorithms on road map of Wuhan for my 2022AI course final project.
+Implementation of Pathfinding Algorithms on road map of Wuhan for my 2022AI course final project. You can have a shot at it at https://liuhaozhe6788.github.io/pathfinding.
+
+## Demo
+
+Here is the webpage for Pathfinding Algorithms: 
+
+![alt text](https://github.com/liuhaozhe6788/pathfinding/blob/master/screenshots/webpage.jpeg?raw=true)
+
+After selecting the algorithm and moving the start and target nodes, click "Start progress". After that, a window would show the execution time and the map would display extended edges and the final path. For ALT Search and ALT Search improved, the map would also show two landmarks, which are inportant for pathfinding. A demo result of ALT Search improved looks like this:
+
+![alt text](https://github.com/liuhaozhe6788/pathfinding/blob/master/screenshots/altim.jpeg?raw=true)
 
 ## Four algorithms
 
@@ -14,7 +24,7 @@ Implementation of Pathfinding Algorithms on road map of Wuhan for my 2022AI cour
 
 Generally, ALT Search Improved is the fastest among all four algorithms.
 
-## How to run it
+## How to run it with live-server
 
 1. Install [node.js](https://nodejs.org/en/download/)
 
