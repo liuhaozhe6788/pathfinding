@@ -18,9 +18,9 @@ After selecting the algorithm and moving the start and target nodes, click "Star
 
 **A\* Search**: with euclidean bounds.
 
-**ALT Search**: with triangular inequality lower bounds in [this](https://www.cs.princeton.edu/courses/archive/spr06/cos423/Handouts/GH05.pdf), the landmark is selected using avoid methods in [this](https://www.cs.princeton.edu/courses/archive/spr06/cos423/Handouts/GW05.pdf).
+**ALT Search**: with triangular inequality lower bounds in [this](https://www.cs.princeton.edu/courses/archive/spr06/cos423/Handouts/GH05.pdf), the landmarks are selected using avoid methods in [this](https://www.cs.princeton.edu/courses/archive/spr06/cos423/Handouts/GW05.pdf).
 
-**ALT Search Improved**: select two landmarks that are closely after the target node before each pathfinding search.
+**ALT Search Improved**: based on ALT search, one can select a subset of two landmarks that are close to and after the target node from all the landmarks before each pathfinding search. 
 
 Generally, ALT Search Improved is the fastest among all four algorithms.
 
